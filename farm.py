@@ -111,6 +111,7 @@ def get_best_move(locations):
             print("random move")
             return random.choice(dirs)
 
+    random_count = 0
     oy, ox = image.height//2, image.width//2
     up_count = 0
     down_count = 0
