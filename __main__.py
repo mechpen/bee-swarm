@@ -7,6 +7,7 @@
 #   3. walk to a field
 #   4. farm in a field
 
+import sys
 import time
 import traceback
 
@@ -17,11 +18,14 @@ import image
 
 image.load_clips()
 
+#farm.farm()
+#sys.exit(0)
+
 while True:
-    print(">>> starting game")
-    game.start()
-    print(">>> initing view")
     try:
+        print(">>> starting game")
+        game.start()
+        print(">>> initing view")
         game.init_view()
         print(">>> finding hive")
         steps = hive.find_and_claim()

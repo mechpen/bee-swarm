@@ -42,8 +42,6 @@ def save_image(path, img):
     cv2.imwrite(path, img)
 
 def diff_image(img1, img2):
-    img1 = cv2.blur(img1, (5,5))
-    img2 = cv2.blur(img2, (5,5))
     diff = img1.astype(int) - img2.astype(int)
     return np.sum(np.absolute(diff))
 
@@ -71,34 +69,24 @@ class Clip:
         save_image(self.path(), self.img)
 
     def match(self, img):
-        if self != disconnected_clip:
-            self.check_disconnected(img)
-
         clip = Clip("tmp", self.x, self.y, self.w, self.h)
         clip.clip(img)
         diff = diff_image(self.img, clip.img)
 
         perr = diff/(self.w*self.h)
-        match = perr < self.perr
-        if match:
-            print("matched:", self.name, "max_err:", self.perr, "err", perr)
-        return match
+        return perr < self.perr
 
-    def check_disconnected(self, img):
-        if disconnected_clip.match(img):
-            qemu.send_key("alt-f4")
-            raise Exception("disconnected")
-
-e_clip = Clip("e", x=339, y=43, w=59, h=52)
+e_clip = Clip("e", x=338, y=71, w=62, h=25)
 help_clip = Clip("help", x=975, y=71, w=19, h=27)
 pollen_full_clip = Clip("pollen_full", x=787, y=7, w=4, h=22)
-pollen_empty_clip = Clip("pollen_empty", x=573, y=7, w=4, h=22)
-claim_hive_clip = Clip("claim_hive", x=433, y=46, w=227, h=43)
-make_honey_clip = Clip("make_honey", x=416, y=46, w=144, h=46)
+pollen_empty_clip = Clip("pollen_empty", x=573, y=7, w=4, h=22, perr=20)
+claim_hive_clip = Clip("claim_hive", x=405, y=69, w=208, h=25, perr=40)
+make_honey_clip = Clip("make_honey", x=405, y=69, w=208, h=25, perr=40)
 
 browser_clip = Clip("browser", x=3, y=3, w=60, h=27)
 starting_err_clip = Clip("starting_err", x=310, y=165, w=391, h=160)
 disconnected_clip = Clip("disconnected", x=317, y=283, w=390, h=202)
+idle_timeout_clip = Clip("idle_timeout", x=316, y=294, w=390, h=180)
 
 def load_clips():
     e_clip.load()
@@ -111,9 +99,9 @@ def load_clips():
     browser_clip.load()
     starting_err_clip.load()
     disconnected_clip.load()
+    idle_timeout_clip.load()
 
 if __name__ == "__main__":
-    disconnected_clip.load()
-    help_clip.load()
-    img = load_image("bee_swarm.ppm")
-    help_clip.match(img)
+    img = load_image("/tmp/bee_swarm.ppm")
+    make_honey_clip.clip(img)
+    make_honey_clip.save()

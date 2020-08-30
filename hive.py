@@ -3,15 +3,19 @@ import time
 import numpy as np
 
 import qemu
+import game
 import image
 
 def at_hive(img):
+    game.check_connection_error(img)
     return image.e_clip.match(img) and image.claim_hive_clip.match(img)
 
 def can_make_honey(img):
+    game.check_connection_error(img)
     return image.e_clip.match(img) and image.make_honey_clip.match(img)
 
 def pollen_empty(img):
+    game.check_connection_error(img)
     return image.pollen_empty_clip.match(img)
 
 def count_red(img):
@@ -27,7 +31,6 @@ def count_red(img):
 def find_hive_dir(img):
     left_count = count_red(img[image.oy-30:image.oy+30, :image.ox-100])
     right_count = count_red(img[image.oy-30:image.oy+30, image.ox+100:])
-    print("left %d right %d" % (left_count, right_count))
     if left_count > right_count:
         return "a"
     else:

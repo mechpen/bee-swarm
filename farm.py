@@ -18,9 +18,6 @@ margin_bottom = 128
 min_grid_size = 30
 max_grid_size = 40
 
-pollen_box_top = 3
-pollen_box_left = 572
-
 history = []
 random_count = 0
 
@@ -54,6 +51,8 @@ def find_grids(img):
     return grids, weights, scans
 
 def filter_grids(grids, weights):
+    if len(grids) < 5:
+        return []
     model = ransac.ransac(grids, weights, ransac.LinearFit, 10, 3, 0.6)
     if model is None:
         return []
@@ -130,8 +129,6 @@ def get_best_move(locations):
 
     counts = [up_count, down_count, left_count, right_count]
 
-    # print(counts)
-
     index = np.argmax(counts)
     move = dirs[index]
     history.append(move)
@@ -147,9 +144,13 @@ def get_farm_move(img):
     return get_best_move(locations)
 
 def pollen_full(img):
+    game.check_connection_error(img)
     return image.pollen_full_clip.match(img)
 
 def farm():
+    global random_count
+    random_count = 0
+
     while True:
         img = image.get_screen_image()
         if pollen_full(img):
@@ -160,6 +161,7 @@ def farm():
         if move is None:
             break
         qemu.send_key(move, 0.5)
+        time.sleep(2)
 
 if __name__ == "__main__":
     image_file = "bee_swarm.ppm"

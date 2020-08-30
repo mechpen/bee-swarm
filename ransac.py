@@ -30,13 +30,18 @@ class LinearFit:
     def err(self):
         return self.residuals[0]
 
-def choose_random(points, n, weights=None):
+def choose_random(points, n, weights):
     chosen = set()
+    points = points[:]
+    weights = weights[:]
 
     while len(chosen) < n:
-        cand = random.choices(points, weights=weights)[0]
-        if cand not in chosen:
-            chosen.add(cand)
+        point = random.choices(points, weights=weights)[0]
+        chosen.add(point)
+
+        i = points.index(point)
+        del points[i]
+        del weights[i]
 
     return chosen
 

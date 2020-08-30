@@ -4,17 +4,25 @@ import qemu
 import image
 
 def in_browser(img):
+    check_connection_error(img)
     return image.browser_clip.match(img)
 
-def starting_err(img):
-    return image.starting_err_clip.match(img)
+def check_connection_error(img):
+    if image.disconnected_clip.match(img):
+        qemu.send_key("alt-f4")
+        raise Exception("disconnected")
+
+    if image.idle_timeout_clip.match(img):
+        qemu.send_key("alt-f4")
+        raise Exception("idle timeout")
+
+def in_game(img):
+    check_connection_error(img)
+    return image.help_clip.match(img)
 
 def reset_collect():
     qemu.mouse_button(2)
     qemu.mouse_button(1)
-
-def in_game(img):
-    return image.help_clip.match(img)
 
 def leave():
     qemu.send_key("esc")
@@ -33,11 +41,13 @@ def start():
         qemu.send_key("up")
         qemu.send_key("ret")
         time.sleep(25)
+
+        qemu.send_key("alt-tab")
+        time.sleep(5)
         img = image.get_screen_image()
-        if not starting_err(img):
+        if not in_browser(img):
             break
 
-    qemu.send_key("alt-tab")
     while True:
         img = image.get_screen_image()
         if in_game(img):
@@ -45,11 +55,11 @@ def start():
         time.sleep(3)
 
 def init_view():
+    qemu.mouse_move(600, 900)
     for _ in range(5):
         qemu.send_key("pgup", 0.5)
     for _ in range(5):
         qemu.send_key("o", 0.5)
-    qemu.mouse_move(600, 900)
 
 inverse_keys = {
     "a": "d",
@@ -63,11 +73,78 @@ def rollback(steps):
         key = inverse_keys.get(key, key)
         qemu.send_key(key, dur)
 
+strawberry_steps = [
+    ("s", 1.5),
+    ("s", 1.5),
+    ("s", 1.5),
+    ("a", 1.5),
+]
+
+sunflower_steps = [
+    ("s", 1.5),
+    ("s", 1.5),
+    ("d", 1.5),
+    ("d", 1.5),
+]
+
+clover_steps = [
+    ("s", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("spc", 0.2),
+    ("a", 1.5),
+    ("spc", 0.2),
+    ("a", 1.5),
+]
+
+spider_level = [
+    ("s", 1.5),
+    ("s", 1.5),
+    ("s", 1.5),
+    ("s", 1.5),
+    ("s", 1.5),
+    ("s", 1.5),
+    ("spc", 0.2),
+    ("s", 1.5),
+]
+
+spider_steps = spider_level + [
+    ("a", 1.5),
+]
+
+strawberry_steps = spider_level + [
+    ("d", 1.5),
+]
+
+banboo_steps = spider_level + [
+    ("a", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+]
+
+blueflower_steps = spider_level + [
+    ("s", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("a", 1.5),
+    ("w", 1.5),
+    ("w", 1.5),
+    ("w", 1.5),
+    ("d", 1.5),
+]
+
 def walk_to_field():
-    steps = [
-        ("s", 1.5),
-        ("a", 2),
-    ]
+    steps = spider_steps
     for key, dur in steps:
         qemu.send_key(key, dur)
 
