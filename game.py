@@ -55,7 +55,7 @@ def start():
         time.sleep(3)
 
 def init_view():
-    qemu.mouse_move(600, 900)
+    qemu.mouse_move(300, 300)
     for _ in range(5):
         qemu.send_key("pgup", 0.5)
     for _ in range(5):

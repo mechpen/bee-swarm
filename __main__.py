@@ -15,6 +15,7 @@ import game
 import hive
 import farm
 import image
+import utils
 
 image.load_clips()
 
@@ -26,23 +27,23 @@ field = sys.argv[1]
 
 while True:
     try:
-        print(">>> starting game")
+        utils.log(">>> starting game")
         game.start()
-        print(">>> initing view")
+        utils.log(">>> initing view")
         game.init_view()
-        print(">>> finding hive")
+        utils.log(">>> finding hive")
         steps = hive.find_and_claim()
-        print(">>> making honey")
+        utils.log(">>> making honey")
         hive.make_honey()
-        print(">>> walking back to origin")
+        utils.log(">>> walking to origin")
         game.rollback(steps)
-        print(">>> walking to field")
+        utils.log(">>> walking to field")
         game.walk_to_field(field)
-        print(">>> start farming")
+        utils.log(">>> start farming")
         farm.farm()
-        print(">>> leaving game")
+        utils.log(">>> leaving game")
         game.leave()
         time.sleep(3)
     except Exception as e:
-        print(e)
+        utils.log(e)
         time.sleep(3)

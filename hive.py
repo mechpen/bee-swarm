@@ -42,11 +42,14 @@ def find_and_claim():
     img = image.get_screen_image()
     dir = find_hive_dir(img)
 
-    while True:
+    for _ in range(50):
         img = image.get_screen_image()
         if at_hive(img):
             break
         qemu.send_key(dir, 0.2, log=key_log)
+    else:
+        game.leave()
+        raise Exception("cannot find hive")
 
     qemu.send_key("e")
     while True:
