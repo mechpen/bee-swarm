@@ -84,7 +84,6 @@ claim_hive_clip = Clip("claim_hive", x=405, y=69, w=208, h=25, perr=40)
 make_honey_clip = Clip("make_honey", x=405, y=69, w=208, h=25, perr=40)
 
 browser_clip = Clip("browser", x=3, y=3, w=60, h=27)
-starting_err_clip = Clip("starting_err", x=310, y=165, w=391, h=160)
 disconnected_clip = Clip("disconnected", x=317, y=283, w=390, h=202)
 idle_timeout_clip = Clip("idle_timeout", x=316, y=294, w=390, h=180)
 
@@ -97,7 +96,6 @@ def load_clips():
     make_honey_clip.load()
 
     browser_clip.load()
-    starting_err_clip.load()
     disconnected_clip.load()
     idle_timeout_clip.load()
 

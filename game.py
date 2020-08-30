@@ -73,10 +73,9 @@ def rollback(steps):
         key = inverse_keys.get(key, key)
         qemu.send_key(key, dur)
 
-strawberry_steps = [
+dandelion_steps = [
     ("s", 1.5),
-    ("s", 1.5),
-    ("s", 1.5),
+    ("a", 1.5),
     ("a", 1.5),
 ]
 
@@ -85,6 +84,13 @@ sunflower_steps = [
     ("s", 1.5),
     ("d", 1.5),
     ("d", 1.5),
+]
+
+mushroom_steps = [
+    ("s", 1.5),
+    ("s", 1.5),
+    ("s", 1.5),
+    ("a", 1.5),
 ]
 
 clover_steps = [
@@ -120,6 +126,7 @@ strawberry_steps = spider_level + [
 ]
 
 banboo_steps = spider_level + [
+    ("s", 1.5),
     ("a", 1.5),
     ("a", 1.5),
     ("a", 1.5),
@@ -143,9 +150,19 @@ blueflower_steps = spider_level + [
     ("d", 1.5),
 ]
 
-def walk_to_field():
-    steps = spider_steps
-    for key, dur in steps:
+field_steps = {
+    "dandeline"  : dandelion_steps,
+    "sunflower"  : sunflower_steps,
+    "mushroom"   : mushroom_steps,
+    "clover"     : clover_steps,
+    "spider"     : spider_steps,
+    "strawberry" : strawberry_steps,
+    "banboo"     : banboo_steps,
+    "blueflower" : blueflower_steps,
+}
+
+def walk_to_field(field):
+    for key, dur in field_steps[field]:
         qemu.send_key(key, dur)
 
 if __name__ == "__main__":

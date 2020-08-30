@@ -18,8 +18,11 @@ import image
 
 image.load_clips()
 
-#farm.farm()
-#sys.exit(0)
+if len(sys.argv) == 1:
+    farm.farm()
+    sys.exit(0)
+
+field = sys.argv[1]
 
 while True:
     try:
@@ -34,7 +37,7 @@ while True:
         print(">>> walking back to origin")
         game.rollback(steps)
         print(">>> walking to field")
-        game.walk_to_field()
+        game.walk_to_field(field)
         print(">>> start farming")
         farm.farm()
         print(">>> leaving game")
